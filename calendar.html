@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        td,
+        th {
+            border: 1px solid black;
+            padding: 3px;
+            text-align: center;
+            width: 500px;
+            height: 50px;
+        }
+
+        th {
+            font-weight: bold;
+            background-color: #E6E6E6;
+        }
+        button
+        {
+            text-align: center;
+        }
+
+        select
+        {
+            text-align: center;
+            width: 100px;
+            height: 20px;
+        }
+        input
+        {
+            width: 100px;
+            height: 20px;
+        }
+    </style>
+    <meta charset="utf-8">
+</head>
+
+<body>
+<form action="select" method="post">
+<p>
+    <input name="MyText" type="text" id="year" />
+
+    <select id="select_month" align="top">
+    <option selected="selected">Select month</option>
+    <option id = "0" value = '1'>January</option>
+    <option id = "1" value = '2'>February</option>
+    <option id = "2" value = '3'>March</option>
+    <option id = "3" value = '4'>April</option>
+    <option id = "4" value = '5'>May</option>
+    <option id = "5" value = '6'>June</option>
+    <option id = "6" value = '7'>July</option>
+    <option id = "7" value = '8'>August</option>
+    <option id = "8" value = '9'>September</option>
+    <option id = "9" value = '10'>October</option>
+    <option id = "10" value = '11'>November</option>
+    <option id = "11" value = '12'>December</option>
+</select></td>
+    <input type="button" id="button1" value="Show calendar" onclick="ClickButton()">
+
+
+</p>
+
+</form>
+
+<input name="MyDate" type="date" id="date" align="top"/>
+
+
+<div id="calendar"></div>
+
+<script>
+    function createCalendar(id, year, month) {
+        var elem = document.getElementById(id);
+
+        var mon = month - 1; // месяцы в JS идут от 0 до 11, а не от 1 до 12
+        var d = new Date(year, mon);
+
+        var table = '<table><tr><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th><th>Sunday</th></tr><tr>';
+
+        // заполнить первый ряд от понедельника
+        // и до дня, с которого начинается месяц
+        // * * * | 1  2  3  4
+        for (var i = 0; i < getDay(d); i++) {
+            table += '<td></td>';
+        }
+
+        // ячейки календаря с датами
+        while (d.getMonth() == mon) {
+            table += '<td>' + d.getDate() + '</td>';
+
+            if (getDay(d) % 7 == 6) { // вс, последний день - перевод строки
+                table += '</tr><tr>';
+            }
+
+            d.setDate(d.getDate() + 1);
+        }
+
+        // добить таблицу пустыми ячейками, если нужно
+        if (getDay(d) != 0) {
+            for (var i = getDay(d); i < 7; i++) {
+                table += '<td></td>';
+            }
+        }
+
+        // закрыть таблицу
+        table += '</tr></table>';
+
+        // только одно присваивание innerHTML
+        elem.innerHTML = table;
+    }
+
+    function getDay(date) { // получить номер дня недели, от 0(пн) до 6(вс)
+        var day = date.getDay();
+        if (day == 0) day = 7;
+        return day - 1;
+    }
+    
+    function ClickButton() {
+        var num = document.getElementById('select_month');
+        var month_num = num.options[num.selectedIndex].value;
+        var year = document.getElementById('year').value;
+        createCalendar("calendar", year, month_num);
+    }
+    createCalendar("calendar", 2017, 1);
+
+
+</script>
+
+</body>
+
+</html>
